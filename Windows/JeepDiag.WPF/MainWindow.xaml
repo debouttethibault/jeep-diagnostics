@@ -18,17 +18,17 @@
                 </TextBlock>
             </Button>
             <Separator Margin="4, 4, 4, 0" />
-            <Button x:Name="BtnReadDTC" Margin="4, 4, 4, 0">
+            <Button x:Name="BtnReadDTC" Margin="4, 4, 4, 0" IsEnabled="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center">
                     Read DTC
                 </TextBlock>
             </Button>
-            <Button x:Name="BtnResetDTC" Margin="4, 4, 4, 0">
+            <Button x:Name="BtnResetDTC" Margin="4, 4, 4, 0" IsEnabled="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center">
                     Reset DTC
                 </TextBlock>
             </Button>
-            <Button x:Name="BtnReadData" Margin="4, 4, 4, 0">
+            <Button x:Name="BtnReadData" Margin="4, 4, 4, 0" IsEnabled="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center">
                     Read Diagnostic Data
                 </TextBlock>

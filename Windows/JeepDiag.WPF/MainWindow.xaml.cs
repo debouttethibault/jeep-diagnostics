@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace JeepDiag.WPF
 {
     public partial class MainWindow : Window
     {
-        private readonly Communication _comms;
+        private ICommunication _comms;
 
         public MainWindow()
         {
@@ -23,7 +25,7 @@ namespace JeepDiag.WPF
             BtnConnect.Click += BtnConnect_Click;
             BtnClear.Click += BtnClear_Click;
 
-            BtnReadData.Click += BtnReadData_Click;
+            //BtnReadData.Click += BtnReadData_Click;
             BtnReadDTC.Click += BtnReadDTC_Click;
             BtnResetDTC.Click += BtnResetDTC_Click;
         }
@@ -43,7 +45,10 @@ namespace JeepDiag.WPF
                 dialog.ShowDialog();
 
                 var selected = dialog.SelectedSerialPortName;
-                _comms.SetSerialPortName(selected);
+                if (!string.IsNullOrEmpty(selected) && selected.Equals(Communication.EmulatorPortName))
+                    _comms = new CommunicationEmulator();
+                else
+                    _comms.SetSerialPortName(selected);
             }
 
             try
@@ -63,33 +68,65 @@ namespace JeepDiag.WPF
 
         private void SetButtonsEnabled(bool enabled)
         {
-            BtnReadData.IsEnabled = enabled;
+            //BtnReadData.IsEnabled = enabled;
             BtnReadDTC.IsEnabled = enabled;
             BtnResetDTC.IsEnabled = enabled;
         }
 
-        private void BtnResetDTC_Click(object sender, RoutedEventArgs e)
-        {
-            SendRequest();
-        }
-
-        private void BtnReadDTC_Click(object sender, RoutedEventArgs e)
-        {
-            SendRequest();
-        }
-
-        private void BtnReadData_Click(object sender, RoutedEventArgs e)
-        {
-            SendRequest();
-        }
-
-        public async void SendRequest()
+        private async void BtnResetDTC_Click(object sender, RoutedEventArgs e)
         {
             SetButtonsEnabled(false);
-        
-            await Task.Delay(1000);
+            
+            var status = await _comms.ResetDTCs();
+            AppendOutput(LabelClearDTCs, status);
 
             SetButtonsEnabled(true);
         }
+
+        private async void BtnReadDTC_Click(object sender, RoutedEventArgs e)
+        {
+            SetButtonsEnabled(false);
+            
+            var dtcs = await _comms.RequestStoredDTC();
+            if (!dtcs.Any())
+                AppendOutput(LabelStoredDTCs, "/");
+            AppendOutput(LabelStoredDTCs, dtcs);
+
+            dtcs = await _comms.RequestPendingDTC();
+            if (!dtcs.Any())
+                AppendOutput(LabelPendingDTCs, "/");
+            AppendOutput(LabelPendingDTCs, dtcs);
+
+            SetButtonsEnabled(true);
+        }
+
+        private const string LabelPendingDTCs = "Pending DTCs";
+        private const string LabelStoredDTCs = "Stored DTCs";
+        private const string LabelClearDTCs = "Clear DTCs";
+
+        private void AppendOutput(string label, string output)
+        {
+            TxtOutput.Text += $"{label}:\n";
+            TxtOutput.Text += $"  {output}\n";
+            TxtOutput.Text += "\n";
+
+            TxtOutput.ScrollToEnd();
+        }
+
+        private void AppendOutput(string label, ICollection<string> output)
+        {
+            TxtOutput.Text += $"{label}:\n";
+            foreach (var item in output)
+                TxtOutput.Text += $"  {item}\n";
+            TxtOutput.Text += "\n";
+
+            TxtOutput.ScrollToEnd();
+        }
+
+        //private async void BtnReadData_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SetButtonsEnabled(false);
+        //    SetButtonsEnabled(true);
+        //}
     }
 }

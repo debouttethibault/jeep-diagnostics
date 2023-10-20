@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace JeepDiag.WPF
     public partial class SelectSerialPortDialog : Window
     {
         public string? SelectedSerialPortName { get; private set; }
-        private readonly string[] _serialPortNames;
+        private readonly IDictionary<string, string> _serialPortNames;
 
-        public SelectSerialPortDialog(string[] serialPortNames)
+        public SelectSerialPortDialog(IDictionary<string, string> serialPortNames)
         {
             _serialPortNames = serialPortNames;
 
@@ -42,7 +43,9 @@ namespace JeepDiag.WPF
         private void LstPorts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             BtnSelect.IsEnabled = LstPorts.SelectedIndex != -1;
-            SelectedSerialPortName = LstPorts.SelectedItem as string;
+
+            var selectedItem = LstPorts.SelectedItem as KeyValuePair<string, string>?;
+            SelectedSerialPortName = selectedItem?.Key;
         }
 
         protected override void OnClosing(CancelEventArgs e)

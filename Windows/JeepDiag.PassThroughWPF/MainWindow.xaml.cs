@@ -20,8 +20,7 @@ namespace JeepDiag.PassThroughWPF
 
             TxtOutput.Text = string.Empty;
             
-
-            _serialPort = new SerialPort("COM7", 115200);
+            _serialPort = new SerialPort("COM9", 115200);
             _serialPort.DataReceived += SerialPort_DataReceived;
 
             OpenSerialPort();
