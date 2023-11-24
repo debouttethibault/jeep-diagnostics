@@ -1,14 +1,34 @@
+#include <SoftwareSerial.h>
+
+#define PIN_SCI_TX 10
+#define PIN_SCI_RX 11
+
+// TODO: Handle SCI baud rate change
+//    1. Intercept baud rate command
+//    2. Intercept reply from PCM
+//    3. If reply success: change sciSerial baud rate
+
+SoftwareSerial sciSerial(PIN_SCI_RX, PIN_SCI_RX, true);
+
 void setup() {
   Serial.begin(115200);
-  Serial1.begin(7812);
+  sciSerial.begin(7812);
 }
 
+// int rxIndex = 0;
+// int txIndex = 0;
+// uint8_t rxBuffer[32];
+// uint8_t txBuffer[32];
+uint8_t data;
+
 void loop() {
-  if (Serial.available()) {        // If anything comes in Serial (USB),
-    Serial1.write(Serial.read());  // read it and send it out Serial1 (pins 0 & 1)
+  if (Serial.available()) {
+    data = Serial.read();
+    sciSerial.write(data);
   }
 
-  if (Serial1.available()) {       // If anything comes in Serial1 (pins 0 & 1)
-    Serial.write(Serial1.read());  // read it and send it out Serial (USB)
+  if (sciSerial.available()) {
+    data = sciSerial.read();
+    Serial.write(data);
   }
 }
