@@ -29,7 +29,16 @@ bool handleBaudRequest();
 void setup() {
   Serial.begin(115200);
   sciSerial.begin(lowSpeedBaud);
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  
+  for (int i = 0; i <= 6; i++) {
+    digitalWrite(LED_BUILTIN, i % 2);
+    delay(500);
+  }
 }
+
+unsigned long long timeLastAvailable;
 
 void loop() {
   handleBaudChange();
@@ -42,9 +51,17 @@ void loop() {
     }
 
     sciSerial.write(inputBuffer, bufferSize);
-    delay(500);
+    delay(1);
+
+    while (!sciSerial.available()) {
+      if (millis() - timeLastAvailable > 1000) // Time-out
+        break;
+      delay(1);
+    }
 
     while (sciSerial.available()) {
+      timeLastAvailable = millis();
+      
       numReadSci = sciSerial.readBytes(sciBuffer, bufferSize);
       Serial.write(sciBuffer, bufferSize);
 
@@ -67,11 +84,15 @@ void handleBaudChange() {
     sciSerial.end();
     sciSerial.begin(highSpeedBaud);
     
+    digitalWrite(LED_BUILTIN, HIGH);
+
     highSpeedConfirmed = false;
   } 
   else if (lowSpeedRequested && lowSpeedConfirmed) {
     sciSerial.end();
     sciSerial.begin(lowSpeedBaud);
+
+    digitalWrite(LED_BUILTIN, LOW);
 
     lowSpeedConfirmed = false;
   }
