@@ -1,0 +1,3 @@
+[submodule "Windows/DRBDBReader"]
+	path = Windows/DRBDBReader
+	url = https://github.com/debouttethibault/DRBDBReader
