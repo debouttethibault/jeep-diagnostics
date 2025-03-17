@@ -13,7 +13,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0
+        submodules: 'recursive'
 
     # Install the .NET Core workload
     - name: Install .NET Core
@@ -27,14 +27,4 @@ jobs:
 
     - name: Build WPF application
       working-directory: Windows
-      run: dotnet publish JeepDiag.WPF -c Release -r win-x64 --self-contained false -o output
-
-    - name: Create ZIP package
-      working-directory: Windows
-      run: Compress-Archive -Path output/* -DestinationPath release.zip
-
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-wpf-build
-        path: Windows/release.zip
+      run: dotnet build JeepDiag.WPF --configuration Release --runtime win-x64 ---self-contained false
