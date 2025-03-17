@@ -1,0 +1,30 @@
+name: .NET Core Desktop
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      working-directory: Windows
+      run: dotnet restore
+
+    - name: Build WPF application
+      working-directory: Windows
+      run: dotnet build JeepDiag.WPF --configuration Release --runtime win-x64 --self-contained false --no-restore
