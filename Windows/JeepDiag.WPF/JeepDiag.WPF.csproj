@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
 	<ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -15,10 +15,6 @@
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
     <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DRBDBReader\DRBDBReader.DB\DRBDBReader.DB.csproj" />
-  </ItemGroup>
   
   <ItemGroup>
     <None Remove="appsettings.json" />
@@ -29,6 +25,10 @@
     <Content Include="Assets\jeep-logo-1987.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\DRBDBReader\DRBDBReader.Db\DRBDBReader.Db.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,8 +4,8 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DRBDBReader.DB;
-using DRBDBReader.DB.Records;
+using DRBDBReader.Db;
+using DRBDBReader.Db.Records;
 using Microsoft.Win32;
 
 namespace JeepDiag.WPF.ViewModels;
