@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="JeepDiag.WPF.Views.DatabaseView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:vm="clr-namespace:JeepDiag.WPF.ViewModels"
+      d:DataContext="{d:DesignInstance {x:Type vm:DatabaseViewModel}, IsDesignTimeCreatable=False}"     
+      mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Command="{Binding LoadDatabaseFileCommand}">
+                Load Database File
+            </Button>
+            <Button Command="{Binding LoadDatabaseCommand}" IsEnabled="{Binding IsFileSelected, Mode=OneWay}" Margin="4, 0, 0, 0">
+                Reload Database
+            </Button>
+            <Button Command="{Binding DeselectModuleCommand}" IsEnabled="{Binding IsModuleSelected}" Margin="4, 0, 0, 0">
+                Go To Module List
+            </Button>
+        </StackPanel>
+        
+        <TextBlock Grid.Row="1" Text="{Binding Title}" />
+        
+        <ScrollViewer Grid.Row="2" Visibility="{Binding ModuleListVisibility}">
+            <ListView ItemsSource="{Binding Modules}" SelectedIndex="{Binding SelectedModuleId, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding Key, Converter={StaticResource HexStringConverter}}" />
+                            <TextBlock Text="{Binding Value}" Margin="4,0,0,0" />
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+        <ScrollViewer Grid.Row="2" Visibility="{Binding CommandListVisibility}">
+            <ListView ItemsSource="{Binding ModuleCommands}"></ListView>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

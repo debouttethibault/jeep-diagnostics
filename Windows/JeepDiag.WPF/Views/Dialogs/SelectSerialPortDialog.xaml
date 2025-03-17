@@ -1,0 +1,35 @@
+﻿<Window x:Class="JeepDiag.WPF.Views.Dialogs.SelectSerialPortDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dvm="clr-namespace:JeepDiag.WPF.ViewModels.Dialogs"
+        d:DataContext="{d:DesignInstance {x:Type dvm:SelectSerialPortViewModel}, IsDesignTimeCreatable=False}" 
+        mc:Ignorable="d"
+        Title="Jeep Diagnostics"
+        SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Margin="16">
+            <Label Padding="0, 0, 0, 4">Select COM Port</Label>
+            <ComboBox ItemsSource="{Binding SerialPortNames}" SelectedIndex="{Binding SelectedSerialPortId, Mode=TwoWay}" MinWidth="180" />
+            <Grid Margin="0, 4, 0, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Visibility="{Binding LoadingVisibility}" Grid.Column="0">
+                    Loading...
+                </Label>
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                    <Button Padding="4" Command="{Binding LoadSerialPortsCommand}">
+                        Reload Ports
+                    </Button>
+                    <Button Padding="4" Margin="4, 0, 0, 0" Command="{Binding SelectSerialPortCommand}" IsEnabled="{Binding IsSelectEnabled}">
+                        Select
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </StackPanel>
+</Window>

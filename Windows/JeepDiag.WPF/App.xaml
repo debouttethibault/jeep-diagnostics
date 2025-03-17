@@ -1,0 +1,22 @@
+﻿<Application x:Class="JeepDiag.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:v="clr-namespace:JeepDiag.WPF.Views"
+             xmlns:local="clr-namespace:JeepDiag.WPF"
+             xmlns:vm="clr-namespace:JeepDiag.WPF.ViewModels">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <local:HexStringConverter x:Key="HexStringConverter" />
+            
+            <DataTemplate DataType="{x:Type vm:DatabaseViewModel}">
+                <v:DatabaseView></v:DatabaseView>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                <v:HomeView></v:HomeView>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
