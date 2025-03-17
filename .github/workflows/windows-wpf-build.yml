@@ -27,4 +27,4 @@ jobs:
 
     - name: Build WPF application
       working-directory: Windows
-      run: dotnet build JeepDiag.WPF --configuration Release --runtime win-x64 ---self-contained false
+      run: dotnet build JeepDiag.WPF --configuration Release --runtime win-x64 --self-contained false --no-restore
