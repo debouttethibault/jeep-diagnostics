@@ -23,17 +23,18 @@ jobs:
 
     - name: Restore dependencies
       working-directory: Windows
-      run: dotnet restore -p JeepDiag.WPF
+      run: dotnet restore
 
     - name: Build WPF application
       working-directory: Windows
-      run: dotnet publish -p JeepDiag.WPF -c Release -r win-x64 --self-contained false -o output
+      run: dotnet publish JeepDiag.WPF -c Release -r win-x64 --self-contained false -o output
 
     - name: Create ZIP package
+      working-directory: Windows
       run: Compress-Archive -Path output/* -DestinationPath release.zip
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
         name: windows-wpf-build
-        path: release.zip
+        path: Windows/release.zip
